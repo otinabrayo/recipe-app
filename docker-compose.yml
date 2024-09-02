@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DEV=true
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    working_dir: /app  # Set the working directory inside the container
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
