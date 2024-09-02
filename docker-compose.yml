@@ -10,6 +10,6 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
-    working_dir: /app  # Set the working directory inside the container
+    # working_dir: /app  # Set the working directory inside the container
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
