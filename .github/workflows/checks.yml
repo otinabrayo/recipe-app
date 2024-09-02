@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Test
-        run: docker-compose run --rm sh -c "python manage.py test"
+        run: docker-compose run --rm app -c "python manage.py test"
       - name: Lint
-        run: docker-compose run --rm sh -c "flake8"
+        run: docker-compose run --rm app -c "flake8"
     
