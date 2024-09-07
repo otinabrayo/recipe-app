@@ -20,5 +20,38 @@ class PublicTagsApiTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
+
     def test_auth_required(self):
-        
+        response = self.client.get(TAGS_URL)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class PrivateTagsApiTest(TestCase):
+
+    def setUp(self):
+        self.user = create_user()
+        self.client = APIClient()
+        self.client.force_authenticate(self.user)
+
+    def test_retrieve_tags(self):
+        Tag.objects.create(name='Vegan')
+        Tag.objects.create(name='Dessert')
+
+        response = self.client.get(TAGS_URL)
+        tags = Tag.objects.all().order_by('-name')
+        serializer = TagSerializer(tags, many=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_tags_limited_user(self):
+        user2 = create_user(email='test2@example.com')
+        Tag.objects.create(name='Vegan', user=user2)
+        tag = Tag.objects.create(user=self.user, name='test')
+
+        response = self.client.get(TAGS_URL)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['name'], tag.name)
+        self.assertEqual(response.data[0]['id'], tag.id)
