@@ -5,7 +5,7 @@ from core.models import Recipe
 class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ['title', 'aid', 'time_minutes', 'price', 'link']
+        fields = ['title', 'id', 'time_minutes', 'description', 'price', 'link']   # noqa
         read_only_fields = ['id']
 
 
