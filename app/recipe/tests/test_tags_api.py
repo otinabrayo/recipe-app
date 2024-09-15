@@ -35,7 +35,7 @@ class PrivateTagsApiTest(TestCase):
 
     def test_retrieve_tags(self):
         user = get_user_model().objects.create_user(
-            'test@example.com',
+            'test1@example.com',
             'password123'
         )
         self.client.force_authenticate(user=user)
