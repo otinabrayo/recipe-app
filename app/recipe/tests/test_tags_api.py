@@ -34,8 +34,14 @@ class PrivateTagsApiTest(TestCase):
         self.client.force_authenticate(self.user)
 
     def test_retrieve_tags(self):
-        Tag.objects.create(name='Vegan')
-        Tag.objects.create(name='Dessert')
+        user = get_user_model().objects.create_user(
+            'test@example.com',
+            'password123'
+        )
+        self.client.force_authenticate(user=user)
+
+        # Create tags with the user
+        Tag.objects.create(user=user, name='Dessert')
 
         response = self.client.get(TAGS_URL)
         tags = Tag.objects.all().order_by('-name')
@@ -43,6 +49,7 @@ class PrivateTagsApiTest(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, serializer.data)
+
 
     def test_tags_limited_user(self):
         user2 = create_user(email='test2@example.com')
