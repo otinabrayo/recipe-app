@@ -50,7 +50,6 @@ class PrivateTagsApiTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, serializer.data)
 
-
     def test_tags_limited_user(self):
         user2 = create_user(email='test2@example.com')
         Tag.objects.create(name='Vegan', user=user2)
